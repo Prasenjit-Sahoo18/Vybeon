@@ -1,0 +1,403 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Auth Models (NextAuth compatible) ───────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  username      String?   @unique
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  bio           String?
+  password      String?
+  isPublic      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Auth
+  accounts Account[]
+  sessions Session[]
+
+  // Music
+  playlists       Playlist[]
+  likedTracks     LikedTrack[]
+  followedArtists FollowedArtist[]
+  recentlyPlayed  RecentlyPlayed[]
+  listeningHistory ListeningHistory[]
+  queue           Queue?
+  preferences     UserPreference?
+  achievements    UserAchievement[]
+  comments        Comment[]
+
+  // Social
+  following User[] @relation("UserFollows")
+  followers User[] @relation("UserFollows")
+
+  @@index([email])
+  @@index([username])
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// ─── Music Models ─────────────────────────────────────────────────────────────
+
+model Genre {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  color       String?   // hex color for UI
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+
+  tracks TrackGenre[]
+
+  @@index([slug])
+  @@map("genres")
+}
+
+model Artist {
+  id           String   @id @default(cuid())
+  name         String
+  slug         String   @unique
+  bio          String?  @db.Text
+  imageUrl     String?
+  coverUrl     String?
+  country      String?
+  verified     Boolean  @default(false)
+  monthlyListeners Int  @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  albums          Album[]
+  tracks          Track[]
+  followedBy      FollowedArtist[]
+  listeningHistory ListeningHistory[]
+
+  @@index([name])
+  @@index([slug])
+  @@map("artists")
+}
+
+model Album {
+  id          String    @id @default(cuid())
+  title       String
+  slug        String    @unique
+  artistId    String
+  imageUrl    String?
+  releaseDate DateTime?
+  albumType   AlbumType @default(ALBUM)
+  description String?   @db.Text
+  totalTracks Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  artist Artist  @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  tracks Track[]
+
+  @@index([title])
+  @@index([artistId])
+  @@map("albums")
+}
+
+enum AlbumType {
+  ALBUM
+  SINGLE
+  EP
+  COMPILATION
+}
+
+model Track {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  artistId    String
+  albumId     String?
+  duration    Int      // seconds
+  audioUrl    String?
+  previewUrl  String?
+  imageUrl    String?
+  trackNumber Int?
+  playCount   Int      @default(0)
+  isExplicit  Boolean  @default(false)
+  bpm         Int?
+  energy      Float?   // 0-1
+  valence     Float?   // 0-1 (mood: sad to happy)
+  danceability Float?  // 0-1
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  artist   Artist  @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  album    Album?  @relation(fields: [albumId], references: [id], onDelete: SetNull)
+  genres   TrackGenre[]
+  likedBy  LikedTrack[]
+  inPlaylists PlaylistTrack[]
+  recentlyPlayed RecentlyPlayed[]
+  listeningHistory ListeningHistory[]
+  queueItems QueueItem[]
+  lyrics   Lyrics?
+  comments Comment[]
+
+  @@index([title])
+  @@index([artistId])
+  @@index([albumId])
+  @@index([playCount])
+  @@map("tracks")
+}
+
+model TrackGenre {
+  trackId String
+  genreId String
+
+  track Track @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  genre Genre @relation(fields: [genreId], references: [id], onDelete: Cascade)
+
+  @@id([trackId, genreId])
+  @@map("track_genres")
+}
+
+// ─── User Music Models ────────────────────────────────────────────────────────
+
+model Playlist {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  imageUrl    String?
+  userId      String
+  isPublic    Boolean  @default(true)
+  isGenerated Boolean  @default(false) // AI/Vibe Engine generated
+  mood        String?
+  totalTracks Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user   User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tracks PlaylistTrack[]
+
+  @@index([userId])
+  @@map("playlists")
+}
+
+model PlaylistTrack {
+  id         String   @id @default(cuid())
+  playlistId String
+  trackId    String
+  position   Int
+  addedAt    DateTime @default(now())
+
+  playlist Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+  track    Track    @relation(fields: [trackId], references: [id], onDelete: Cascade)
+
+  @@unique([playlistId, trackId])
+  @@index([playlistId])
+  @@map("playlist_tracks")
+}
+
+model LikedTrack {
+  id        String   @id @default(cuid())
+  userId    String
+  trackId   String
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  track Track @relation(fields: [trackId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, trackId])
+  @@index([userId])
+  @@map("liked_tracks")
+}
+
+model FollowedArtist {
+  id        String   @id @default(cuid())
+  userId    String
+  artistId  String
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  artist Artist @relation(fields: [artistId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, artistId])
+  @@index([userId])
+  @@map("followed_artists")
+}
+
+model RecentlyPlayed {
+  id        String   @id @default(cuid())
+  userId    String
+  trackId   String
+  playedAt  DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  track Track @relation(fields: [trackId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([playedAt])
+  @@map("recently_played")
+}
+
+model ListeningHistory {
+  id         String   @id @default(cuid())
+  userId     String
+  trackId    String
+  artistId   String
+  durationMs Int      // ms actually listened
+  playedAt   DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  track  Track  @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  artist Artist @relation(fields: [artistId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([playedAt])
+  @@map("listening_history")
+}
+
+model Queue {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  updatedAt DateTime @updatedAt
+
+  user  User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items QueueItem[]
+
+  @@map("queues")
+}
+
+model QueueItem {
+  id       String @id @default(cuid())
+  queueId  String
+  trackId  String
+  position Int
+
+  queue Queue @relation(fields: [queueId], references: [id], onDelete: Cascade)
+  track Track @relation(fields: [trackId], references: [id], onDelete: Cascade)
+
+  @@index([queueId])
+  @@map("queue_items")
+}
+
+model UserPreference {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  favoriteGenres    String[] // genre ids
+  preferredMoods    String[]
+  audioQuality      String   @default("high")
+  autoplayEnabled   Boolean  @default(true)
+  crossfadeSeconds  Int      @default(0)
+  normalizationEnabled Boolean @default(true)
+  updatedAt         DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_preferences")
+}
+
+model Lyrics {
+  id        String   @id @default(cuid())
+  trackId   String   @unique
+  content   String   @db.Text
+  synced    Boolean  @default(false) // synchronized with timestamps
+  syncedLrc String?  @db.Text         // LRC format
+  source    String?
+  createdAt DateTime @default(now())
+
+  track Track @relation(fields: [trackId], references: [id], onDelete: Cascade)
+
+  @@map("lyrics")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  userId    String
+  trackId   String
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  track Track @relation(fields: [trackId], references: [id], onDelete: Cascade)
+
+  @@index([trackId])
+  @@map("comments")
+}
+
+// ─── Gamification ────────────────────────────────────────────────────────────
+
+model Achievement {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  name        String
+  description String
+  icon        String
+  category    String
+  threshold   Int      @default(1)
+  createdAt   DateTime @default(now())
+
+  earnedBy UserAchievement[]
+
+  @@map("achievements")
+}
+
+model UserAchievement {
+  id            String   @id @default(cuid())
+  userId        String
+  achievementId String
+  earnedAt      DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+  @@index([userId])
+  @@map("user_achievements")
+}
