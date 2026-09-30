@@ -7,6 +7,7 @@ import { AlbumCard } from "@/components/music/AlbumCard";
 import { MoodCard } from "@/components/music/MoodCard";
 import { prisma } from "@/lib/db/prisma";
 import { MOOD_CONFIGS, Track, Artist, Album, Genre } from "@/types";
+import { DEMO_GENRES, DEMO_TRACKS, DEMO_ARTISTS, DEMO_ALBUMS } from "@/lib/music/demo-catalog";
 import { Compass, Sparkles, Flame, Radio } from "lucide-react";
 import Link from "next/link";
 
@@ -37,24 +38,26 @@ async function getDiscoverData() {
       }),
     ]);
 
-    const hiddenGems = hiddenGemsRaw.map((t) => ({
-      ...t,
-      genres: t.genres.map((g) => g.genre),
-    })) as unknown as Track[];
+    const hiddenGems = (hiddenGemsRaw.length > 0
+      ? hiddenGemsRaw.map((t) => ({ ...t, genres: t.genres.map((g) => g.genre) }))
+      : [...DEMO_TRACKS].reverse().slice(0, 10)) as unknown as Track[];
+
+    const finalGenres = (genres.length > 0 ? genres : DEMO_GENRES) as unknown as Genre[];
+    const risingArtists = (risingArtistsRaw.length > 0 ? risingArtistsRaw : DEMO_ARTISTS) as unknown as Artist[];
+    const albums = (albumsRaw.length > 0 ? albumsRaw : DEMO_ALBUMS) as unknown as Album[];
 
     return {
-      genres: genres as unknown as Genre[],
+      genres: finalGenres,
       hiddenGems,
-      risingArtists: risingArtistsRaw as unknown as Artist[],
-      albums: albumsRaw as unknown as Album[],
+      risingArtists,
+      albums,
     };
   } catch (err) {
-    console.error("Discover page fetch error:", err);
     return {
-      genres: [],
-      hiddenGems: [],
-      risingArtists: [],
-      albums: [],
+      genres: DEMO_GENRES,
+      hiddenGems: DEMO_TRACKS,
+      risingArtists: DEMO_ARTISTS,
+      albums: DEMO_ALBUMS,
     };
   }
 }

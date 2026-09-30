@@ -7,6 +7,7 @@ import { prisma } from "@/lib/db/prisma";
 import { Play, Heart, Share2, Sparkles, Disc, Music } from "lucide-react";
 import { formatDuration } from "@/lib/utils";
 import type { Metadata } from "next";
+import { DEMO_TRACKS } from "@/lib/music/demo-catalog";
 
 export const dynamic = "force-dynamic";
 
@@ -14,11 +15,36 @@ interface TrackPageProps {
   params: { id: string };
 }
 
+async function getTrackData(id: string) {
+  try {
+    const track = await prisma.track.findUnique({
+      where: { id },
+      include: {
+        artist: true,
+        album: true,
+        genres: { include: { genre: true } },
+      },
+    });
+    if (track) return track;
+  } catch {
+    // Database offline
+  }
+
+  const demo = DEMO_TRACKS.find((t) => t.id === id || t.slug === id);
+  if (demo) {
+    return {
+      ...demo,
+      artist: demo.artist,
+      album: demo.album,
+      genres: (demo.genres || []).map((g) => ({ genre: g })),
+    };
+  }
+
+  return null;
+}
+
 export async function generateMetadata({ params }: TrackPageProps): Promise<Metadata> {
-  const track = await prisma.track.findUnique({
-    where: { id: params.id },
-    include: { artist: true },
-  });
+  const track = await getTrackData(params.id);
 
   if (!track) return { title: "Track Not Found | VYBEON" };
 
@@ -34,14 +60,7 @@ export async function generateMetadata({ params }: TrackPageProps): Promise<Meta
 }
 
 export default async function TrackDetailPage({ params }: TrackPageProps) {
-  const track = await prisma.track.findUnique({
-    where: { id: params.id },
-    include: {
-      artist: true,
-      album: true,
-      genres: { include: { genre: true } },
-    },
-  });
+  const track = await getTrackData(params.id);
 
   if (!track) notFound();
 

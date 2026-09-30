@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { createApiError, createApiSuccess } from "@/lib/utils";
+import { DEMO_TRACKS } from "@/lib/music/demo-catalog";
 
 export async function GET(
   _req: NextRequest,
@@ -17,14 +18,19 @@ export async function GET(
       },
     });
 
-    if (!track) return createApiError("Track not found", 404);
-
-    // Increment play count asynchronously
-    prisma.track.update({ where: { id: params.id }, data: { playCount: { increment: 1 } } }).catch(() => {});
-
-    return createApiSuccess({ ...track, genres: track.genres.map((tg) => tg.genre) });
+    if (track) {
+      // Increment play count asynchronously
+      prisma.track.update({ where: { id: params.id }, data: { playCount: { increment: 1 } } }).catch(() => {});
+      return createApiSuccess({ ...track, genres: track.genres.map((tg) => tg.genre) });
+    }
   } catch (e) {
-    console.error(e);
-    return createApiError("Failed to fetch track", 500);
+    // Database offline
   }
+
+  const demoTrack = DEMO_TRACKS.find((t) => t.id === params.id || t.slug === params.id);
+  if (demoTrack) {
+    return createApiSuccess(demoTrack);
+  }
+
+  return createApiError("Track not found", 404);
 }

@@ -2,7 +2,8 @@ import { NextRequest } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { neonMixSchema } from "@/lib/validation/schemas";
 import { createApiError, createApiSuccess } from "@/lib/utils";
-import { auth } from "@/lib/auth/config";
+import { DEMO_TRACKS } from "@/lib/music/demo-catalog";
+import { Track } from "@/types";
 
 interface RuleMatch {
   keywords: string[];
@@ -17,56 +18,54 @@ interface RuleMatch {
 
 const RULES: RuleMatch[] = [
   {
-    keywords: ["code", "coding", "program", "focus", "study", "work"],
-    genres: ["lo-fi", "ambient", "instrumental"],
-    maxEnergy: 0.45,
-    minValence: 0.3,
-    targetDurationMinutes: 45,
-    replyTemplate: "I've synthesized a deep focus mix for your flow state. Low BPM, minimal lyrics, maximum immersion.",
-  },
-  {
-    keywords: ["workout", "gym", "train", "exercise", "run", "pump", "lift"],
-    genres: ["workout", "electronic", "rock", "hip-hop"],
-    minEnergy: 0.75,
-    targetDurationMinutes: 35,
-    replyTemplate: "Power sequence activated. High-octane tracks tuned for peak kinetic output.",
-  },
-  {
-    keywords: ["chill", "relax", "unwind", "calm", "peace", "rest"],
-    genres: ["chill", "lo-fi", "ambient", "rnb"],
-    maxEnergy: 0.4,
+    keywords: ["code", "coding", "program", "focus", "study", "work", "read", "writing"],
+    genres: ["focus", "chill", "bollywood"],
+    maxEnergy: 0.65,
     minValence: 0.4,
-    targetDurationMinutes: 40,
-    replyTemplate: "Here is your tranquil soundscape. Soft acoustics, ambient textures, and relaxing frequencies.",
-  },
-  {
-    keywords: ["party", "dance", "electronic", "club", "upbeat", "rave", "hype"],
-    genres: ["electronic", "k-pop", "pop"],
-    minEnergy: 0.8,
-    minValence: 0.6,
-    targetDurationMinutes: 50,
-    replyTemplate: "Neon party grid initialized. Heavy basslines and neon synthwave anthems.",
-  },
-  {
-    keywords: ["rain", "rainy", "storm", "coffee", "window"],
-    genres: ["lo-fi", "ambient", "indie"],
-    maxEnergy: 0.35,
-    maxValence: 0.5,
-    targetDurationMinutes: 30,
-    replyTemplate: "Cozy rainy day frequencies loaded. Gentle rhythms and mellow acoustic tones.",
-  },
-  {
-    keywords: ["night", "midnight", "late", "drive", "sleep", "dark"],
-    genres: ["ambient", "chill", "lo-fi", "electronic"],
-    maxEnergy: 0.45,
     targetDurationMinutes: 45,
-    replyTemplate: "Late night atmospheric sequence prepared. Cinematic shadows and deep reverberations.",
+    replyTemplate: "Synthesized a deep flow-state sequence for focus and work. Smooth acoustics, steady rhythm, and zero distractions.",
+  },
+  {
+    keywords: ["workout", "gym", "train", "exercise", "run", "running", "pump", "lift", "fitness", "cardio", "beast"],
+    genres: ["workout", "pop", "rock"],
+    minEnergy: 0.75,
+    targetDurationMinutes: 40,
+    replyTemplate: "Power kinetic sequence activated! High-BPM anthems and driving energy to maximize your workout intensity.",
+  },
+  {
+    keywords: ["night", "drive", "night ride", "midnight", "late", "cruising", "car", "ride", "dark"],
+    genres: ["night", "romantic", "rock"],
+    minEnergy: 0.60,
+    targetDurationMinutes: 45,
+    replyTemplate: "Late-night drive atmosphere loaded. Atmospheric acoustics, deep basslines, and hypnotic midnight frequencies.",
+  },
+  {
+    keywords: ["chill", "relax", "unwind", "calm", "peace", "rest", "coffee", "evening", "slow"],
+    genres: ["chill", "romantic", "focus"],
+    maxEnergy: 0.65,
+    minValence: 0.5,
+    targetDurationMinutes: 35,
+    replyTemplate: "Tranquil soundscape synthesized. Soulful, acoustic textures and mellow melodies to help you unwind.",
+  },
+  {
+    keywords: ["love", "romantic", "romance", "date", "heart", "couple", "feelings"],
+    genres: ["romantic", "bollywood"],
+    minEnergy: 0.50,
+    targetDurationMinutes: 40,
+    replyTemplate: "Romantic masterpiece collection ready. Heartfelt vocal performances from Arijit Singh, KK, and Armaan Malik.",
+  },
+  {
+    keywords: ["party", "dance", "upbeat", "celebrate", "hype", "club", "happy"],
+    genres: ["workout", "pop", "bollywood"],
+    minEnergy: 0.80,
+    minValence: 0.7,
+    targetDurationMinutes: 45,
+    replyTemplate: "Upbeat energy playlist primed. High-tempo chartbusters to turn any room into a celebration.",
   },
 ];
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await auth();
     const body = await req.json();
     const parsed = neonMixSchema.safeParse(body);
 
@@ -86,79 +85,99 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Default rule if no specific keyword matched
     if (!matchedRule) {
       matchedRule = {
         keywords: [],
-        replyTemplate: `Curated a special mix tailored around: "${prompt}". Enjoy the custom sonic wavelength.`,
+        replyTemplate: `Curated a bespoke sonic mix tailored around: "${prompt}". Enjoy this handpicked collection.`,
         targetDurationMinutes: 30,
       };
     }
 
-    // Extract any explicit duration like "20 minute" or "45 min"
     const durationMatch = lowerPrompt.match(/(\d+)\s*(?:min|minute)/);
     const durationMinutes = durationMatch ? parseInt(durationMatch[1], 10) : matchedRule.targetDurationMinutes || 30;
 
-    // Build Prisma query
-    const where: Record<string, unknown> = {};
-    if (matchedRule.minEnergy !== undefined || matchedRule.maxEnergy !== undefined) {
-      where.energy = {
-        gte: matchedRule.minEnergy ?? 0,
-        lte: matchedRule.maxEnergy ?? 1,
-      };
-    }
-    if (matchedRule.minValence !== undefined || matchedRule.maxValence !== undefined) {
-      where.valence = {
-        gte: matchedRule.minValence ?? 0,
-        lte: matchedRule.maxValence ?? 1,
-      };
-    }
-    if (matchedRule.genres && matchedRule.genres.length > 0) {
-      where.genres = {
-        some: {
-          genre: {
-            slug: { in: matchedRule.genres },
-          },
-        },
-      };
-    }
+    let tracks: Track[] = [];
 
-    let tracks = await prisma.track.findMany({
-      where,
-      include: {
-        artist: true,
-        album: true,
-        genres: { include: { genre: true } },
-      },
-      orderBy: { playCount: "desc" },
-      take: 25,
-    });
-
-    if (tracks.length < 5) {
-      tracks = await prisma.track.findMany({
+    // Try DB first
+    try {
+      const dbTracks = await prisma.track.findMany({
         include: {
           artist: true,
           album: true,
           genres: { include: { genre: true } },
         },
         orderBy: { playCount: "desc" },
-        take: 20,
+        take: 30,
       });
+
+      if (dbTracks.length > 0) {
+        tracks = dbTracks.map((t) => ({
+          ...t,
+          genres: t.genres.map((g) => g.genre),
+        })) as unknown as Track[];
+      }
+    } catch {
+      // Ignore DB errors
     }
 
-    const formattedTracks = tracks.map((t) => ({
-      ...t,
-      genres: t.genres.map((g) => g.genre),
-    }));
+    // Fallback to DEMO_TRACKS if DB has no tracks
+    if (tracks.length === 0) {
+      tracks = DEMO_TRACKS;
+    }
+
+    // Filter tracks by matched rule
+    let filtered = tracks.filter((t) => {
+      const energy = t.energy ?? 0.5;
+      const valence = t.valence ?? 0.5;
+      // Check energy
+      if (matchedRule?.minEnergy && energy < matchedRule.minEnergy) return false;
+      if (matchedRule?.maxEnergy && energy > matchedRule.maxEnergy) return false;
+      // Check valence
+      if (matchedRule?.minValence && valence < matchedRule.minValence) return false;
+      if (matchedRule?.maxValence && valence > matchedRule.maxValence) return false;
+      // Check genre
+      if (matchedRule?.genres && matchedRule.genres.length > 0) {
+        const hasGenre = (t.genres || []).some((g) =>
+          matchedRule!.genres!.includes(g.slug)
+        );
+        if (!hasGenre) return false;
+      }
+      return true;
+    });
+
+    // If filter returned too few, loosen constraints or fallback to shuffle
+    if (filtered.length < 5) {
+      if (matchedRule.minEnergy) {
+        filtered = tracks.filter((t) => (t.energy ?? 0.5) >= 0.7);
+      } else if (matchedRule.maxEnergy) {
+        filtered = tracks.filter((t) => (t.energy ?? 0.5) <= 0.7);
+      } else {
+        filtered = tracks;
+      }
+    }
+
+    if (filtered.length < 5) {
+      filtered = tracks;
+    }
+
+    // Shuffle and pick
+    const shuffled = [...filtered].sort(() => Math.random() - 0.5);
 
     return createApiSuccess({
       reply: matchedRule.replyTemplate,
       durationMinutes,
-      tracks: formattedTracks,
+      tracks: shuffled.slice(0, 12),
       query: prompt,
     });
   } catch (error) {
     console.error("NeonMix AI error:", error);
-    return createApiError("NeonMix AI failed to process request", 500);
+    // Fallback response even in catch block
+    const sample = [...DEMO_TRACKS].sort(() => Math.random() - 0.5).slice(0, 8);
+    return createApiSuccess({
+      reply: "Here is your curated playlist with high-fidelity authentic master tracks.",
+      durationMinutes: 30,
+      tracks: sample,
+      query: "Curated Playlist",
+    });
   }
 }

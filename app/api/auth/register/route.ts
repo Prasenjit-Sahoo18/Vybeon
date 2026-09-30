@@ -1,8 +1,7 @@
 import { NextRequest } from "next/server";
-import bcrypt from "bcryptjs";
-import { prisma } from "@/lib/db/prisma";
 import { registerSchema } from "@/lib/validation/schemas";
 import { createApiError, createApiSuccess } from "@/lib/utils";
+import { findUserByEmailOrUsername, createUser } from "@/lib/auth/user-store";
 
 export async function POST(req: NextRequest) {
   try {
@@ -15,34 +14,24 @@ export async function POST(req: NextRequest) {
 
     const { name, username, email, password } = parsed.data;
 
-    const exists = await prisma.user.findFirst({
-      where: {
-        OR: [{ email }, { username }],
-      },
-    });
-
+    const exists = await findUserByEmailOrUsername(email, username);
     if (exists) {
       return createApiError("Email or username is already taken", 409);
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = await prisma.user.create({
-      data: {
-        name,
-        username,
-        email,
-        password: hashedPassword,
-      },
-      select: {
-        id: true,
-        name: true,
-        username: true,
-        email: true,
-      },
+    const user = await createUser({
+      name,
+      username,
+      email,
+      password,
     });
 
-    return createApiSuccess(user, 201);
+    return createApiSuccess({
+      id: user.id,
+      name: user.name,
+      username: user.username,
+      email: user.email,
+    }, 201);
   } catch (error) {
     console.error("Registration error:", error);
     return createApiError("Registration failed", 500);

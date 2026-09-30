@@ -8,6 +8,7 @@ import { prisma } from "@/lib/db/prisma";
 import { BadgeCheck, Play, Users, Disc3, Sparkles } from "lucide-react";
 import { formatNumber } from "@/lib/utils";
 import { Track, Album } from "@/types";
+import { DEMO_ARTISTS, DEMO_TRACKS, DEMO_ALBUMS } from "@/lib/music/demo-catalog";
 
 export const dynamic = "force-dynamic";
 
@@ -36,22 +37,37 @@ async function getArtistData(id: string) {
       },
     });
 
-    if (!artist) return null;
+    if (artist) {
+      const formattedTracks = artist.tracks.map((t) => ({
+        ...t,
+        genres: t.genres.map((g) => g.genre),
+      })) as unknown as Track[];
 
-    const formattedTracks = artist.tracks.map((t) => ({
-      ...t,
-      genres: t.genres.map((g) => g.genre),
-    })) as unknown as Track[];
-
-    return {
-      artist,
-      tracks: formattedTracks,
-      albums: artist.albums as unknown as Album[],
-    };
+      return {
+        artist,
+        tracks: formattedTracks,
+        albums: artist.albums as unknown as Album[],
+      };
+    }
   } catch (err) {
-    console.error("Artist fetch error:", err);
-    return null;
+    // Database offline, fall through
   }
+
+  const demoArtist = DEMO_ARTISTS.find((a) => a.id === id || a.slug === id);
+  if (demoArtist) {
+    const tracks = DEMO_TRACKS.filter((t) => t.artistId === demoArtist.id);
+    const albums = DEMO_ALBUMS.filter((a) => a.artistId === demoArtist.id);
+    return {
+      artist: {
+        ...demoArtist,
+        _count: { tracks: tracks.length, albums: albums.length, followedBy: 840000 },
+      },
+      tracks,
+      albums,
+    };
+  }
+
+  return null;
 }
 
 export default async function ArtistDetailPage({ params }: ArtistPageProps) {

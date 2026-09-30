@@ -47,6 +47,7 @@ export interface Track {
   duration: number;
   audioUrl?: string | null;
   previewUrl?: string | null;
+  youtubeId?: string | null;
   imageUrl?: string | null;
   trackNumber?: number | null;
   playCount: number;

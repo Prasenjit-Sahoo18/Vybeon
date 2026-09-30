@@ -27,6 +27,7 @@ import { LyricsPanel } from "./LyricsPanel";
 
 export function MusicPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const currentTrackIdRef = useRef<string | null>(null);
   const [showVis, setShowVis] = useState(false);
 
   const {
@@ -57,29 +58,39 @@ export function MusicPlayer() {
     setIsLoading,
   } = usePlayerStore();
 
-  // Handle HTML Audio playback
+  // Audio source & playback sync
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    if (currentTrack?.audioUrl) {
-      if (audio.src !== currentTrack.audioUrl) {
-        audio.src = currentTrack.audioUrl;
-        audio.load();
+    if (!currentTrack || !currentTrack.audioUrl) {
+      audio.pause();
+      return;
+    }
+
+    // When a new track is loaded
+    if (currentTrackIdRef.current !== currentTrack.id) {
+      currentTrackIdRef.current = currentTrack.id;
+      audio.src = currentTrack.audioUrl;
+      audio.load();
+      if (currentTrack.duration) {
+        setDuration(currentTrack.duration);
       }
-      if (isPlaying) {
-        audio.play().catch((err) => {
-          console.warn("Autoplay prevented or audio load failed:", err);
+    }
+
+    if (isPlaying) {
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+          console.warn("Playback error or autoplay prevented:", err);
         });
-      } else {
-        audio.pause();
       }
     } else {
       audio.pause();
     }
-  }, [currentTrack, isPlaying]);
+  }, [currentTrack, isPlaying, setDuration]);
 
-  // Audio volume synchronization
+  // Volume & Mute sync
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = isMuted ? 0 : volume;
@@ -89,7 +100,6 @@ export function MusicPlayer() {
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Ignore if active element is an input or textarea
       if (
         document.activeElement?.tagName === "INPUT" ||
         document.activeElement?.tagName === "TEXTAREA"
@@ -132,20 +142,31 @@ export function MusicPlayer() {
   }, [togglePlayPause, nextTrack, prevTrack, volume, setVolume]);
 
   const handleTimeUpdate = () => {
-    if (!audioRef.current) return;
-    const cur = audioRef.current.currentTime;
-    const dur = audioRef.current.duration || currentTrack?.duration || 1;
+    const audio = audioRef.current;
+    if (!audio) return;
+    const cur = audio.currentTime;
+    const dur = audio.duration || currentTrack?.duration || 1;
     setCurrentTime(cur);
-    setDuration(dur);
+    if (audio.duration && !isNaN(audio.duration) && isFinite(audio.duration)) {
+      setDuration(audio.duration);
+    }
     setProgress(cur / dur);
+  };
+
+  const handleLoadedMetadata = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (audio.duration && !isNaN(audio.duration) && isFinite(audio.duration)) {
+      setDuration(audio.duration);
+    }
   };
 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newProgress = parseFloat(e.target.value);
     const audio = audioRef.current;
     if (audio) {
-      const dur = audio.duration || duration;
-      const newTime = newProgress * dur;
+      const targetDur = audio.duration || duration || currentTrack?.duration || 1;
+      const newTime = newProgress * targetDur;
       audio.currentTime = newTime;
       setCurrentTime(newTime);
       setProgress(newProgress);
@@ -155,7 +176,7 @@ export function MusicPlayer() {
   const handleEnded = () => {
     if (repeat === "one" && audioRef.current) {
       audioRef.current.currentTime = 0;
-      audioRef.current.play();
+      audioRef.current.play().catch(() => {});
     } else {
       nextTrack();
     }
@@ -165,20 +186,21 @@ export function MusicPlayer() {
 
   return (
     <>
+      {/* Native HTML5 Audio Element for Instant, High-Fidelity Audio */}
       <audio
         ref={audioRef}
+        onLoadedMetadata={handleLoadedMetadata}
         onTimeUpdate={handleTimeUpdate}
         onEnded={handleEnded}
         onWaiting={() => setIsLoading(true)}
         onPlaying={() => setIsLoading(false)}
-        crossOrigin="anonymous"
       />
 
       {/* Slide-out Panels */}
       {showQueue && <QueuePanel />}
       {showLyrics && <LyricsPanel />}
 
-      {/* Persistent Bottom Bar */}
+      {/* Persistent Bottom Player Bar */}
       <div className="fixed bottom-0 left-0 right-0 z-50 h-20 md:h-24 border-t border-white/[0.08] bg-[#050505]/95 backdrop-blur-2xl px-4 md:px-8">
         <div className="flex h-full items-center justify-between gap-4 max-w-7xl mx-auto">
           {/* Left: Track Artwork & Info */}
@@ -311,7 +333,6 @@ export function MusicPlayer() {
 
           {/* Right: Extra Tools (Visualizer, Lyrics, Queue, Volume, Fullscreen) */}
           <div className="hidden md:flex items-center justify-end gap-3.5 md:w-1/4">
-            {/* Visualizer Inline Mini Toggle */}
             <button
               onClick={() => setShowVis(!showVis)}
               className={cn(

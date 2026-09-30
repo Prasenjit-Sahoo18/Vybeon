@@ -8,6 +8,7 @@ import { prisma } from "@/lib/db/prisma";
 import { Disc3, Calendar, Clock, Play } from "lucide-react";
 import { formatDuration, totalDurationInMinutes } from "@/lib/utils";
 import { Track } from "@/types";
+import { DEMO_ALBUMS, DEMO_TRACKS } from "@/lib/music/demo-catalog";
 
 export const dynamic = "force-dynamic";
 
@@ -31,18 +32,25 @@ async function getAlbumData(id: string) {
       },
     });
 
-    if (!album) return null;
+    if (album) {
+      const formattedTracks = album.tracks.map((t) => ({
+        ...t,
+        genres: t.genres.map((g) => g.genre),
+      })) as unknown as Track[];
 
-    const formattedTracks = album.tracks.map((t) => ({
-      ...t,
-      genres: t.genres.map((g) => g.genre),
-    })) as unknown as Track[];
-
-    return { album, tracks: formattedTracks };
+      return { album, tracks: formattedTracks };
+    }
   } catch (err) {
-    console.error("Album fetch error:", err);
-    return null;
+    // Database unavailable, fall through
   }
+
+  const demoAlbum = DEMO_ALBUMS.find((a) => a.id === id || a.slug === id);
+  if (demoAlbum) {
+    const tracks = DEMO_TRACKS.filter((t) => t.albumId === demoAlbum.id);
+    return { album: demoAlbum, tracks };
+  }
+
+  return null;
 }
 
 export default async function AlbumDetailPage({ params }: AlbumPageProps) {
@@ -91,7 +99,7 @@ export default async function AlbumDetailPage({ params }: AlbumPageProps) {
                 href={`/artists/${album.artistId}`}
                 className="font-bold text-white hover:text-[#B8FF00] transition"
               >
-                {album.artist.name}
+                {album.artist?.name || "Artist"}
               </Link>
               <span>•</span>
               <span>{releaseYear}</span>

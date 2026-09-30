@@ -8,6 +8,7 @@ import { AlbumCard } from "@/components/music/AlbumCard";
 import { MoodCard } from "@/components/music/MoodCard";
 import { prisma } from "@/lib/db/prisma";
 import { MOOD_CONFIGS, Track, Artist, Album } from "@/types";
+import { DEMO_TRACKS, DEMO_ARTISTS, DEMO_ALBUMS } from "@/lib/music/demo-catalog";
 
 export const dynamic = "force-dynamic";
 
@@ -43,29 +44,29 @@ async function getHomeData() {
       }),
     ]);
 
-    const trending = trendingRaw.map((t) => ({
-      ...t,
-      genres: t.genres.map((g) => g.genre),
-    })) as unknown as Track[];
+    const trending = (trendingRaw.length > 0
+      ? trendingRaw.map((t) => ({ ...t, genres: t.genres.map((g) => g.genre) }))
+      : DEMO_TRACKS) as unknown as Track[];
 
-    const newReleases = newReleasesRaw.map((t) => ({
-      ...t,
-      genres: t.genres.map((g) => g.genre),
-    })) as unknown as Track[];
+    const newReleases = (newReleasesRaw.length > 0
+      ? newReleasesRaw.map((t) => ({ ...t, genres: t.genres.map((g) => g.genre) }))
+      : [...DEMO_TRACKS].reverse()) as unknown as Track[];
+
+    const artists = (artistsRaw.length > 0 ? artistsRaw : DEMO_ARTISTS) as unknown as Artist[];
+    const albums = (albumsRaw.length > 0 ? albumsRaw : DEMO_ALBUMS) as unknown as Album[];
 
     return {
       trending,
       newReleases,
-      artists: artistsRaw as unknown as Artist[],
-      albums: albumsRaw as unknown as Album[],
+      artists,
+      albums,
     };
   } catch (error) {
-    console.error("Home data fetch fallback:", error);
     return {
-      trending: [],
-      newReleases: [],
-      artists: [],
-      albums: [],
+      trending: DEMO_TRACKS,
+      newReleases: [...DEMO_TRACKS].reverse(),
+      artists: DEMO_ARTISTS,
+      albums: DEMO_ALBUMS,
     };
   }
 }

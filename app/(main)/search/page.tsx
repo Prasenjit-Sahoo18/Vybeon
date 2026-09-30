@@ -11,20 +11,20 @@ import { Track, Artist, Album } from "@/types";
 import { cn } from "@/lib/utils";
 
 const TRENDING_TAGS = [
-  "Radium Pulse",
-  "Lo-Fi Study",
-  "Cyberpunk Techno",
-  "Bollywood Soul",
-  "K-Pop Galaxy",
-  "Afro Highlife",
-  "Deep Space Ambient",
-  "Dark Wave",
+  "Arijit Singh",
+  "Armaan Malik",
+  "KK",
+  "Workout",
+  "Night Ride",
+  "Romantic",
+  "Deep Focus",
+  "Bollywood",
 ];
 
 function SearchContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const initialQuery = searchParams.get("q") || "";
+  const initialQuery = searchParams.get("q") || searchParams.get("genre") || "";
 
   const [query, setQuery] = useState(initialQuery);
   const [activeTab, setActiveTab] = useState<"all" | "tracks" | "artists" | "albums">("all");

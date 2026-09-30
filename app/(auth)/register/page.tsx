@@ -81,7 +81,7 @@ export default function RegisterPage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-3.5">
+        <form onSubmit={handleSubmit} autoComplete="off" className="space-y-3.5">
           <div className="space-y-1">
             <label className="text-xs font-bold uppercase tracking-wider text-[#8B8B9A]">
               Full Name
@@ -91,10 +91,12 @@ export default function RegisterPage() {
               <input
                 type="text"
                 required
+                autoComplete="off"
+                spellCheck={false}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Alex Mercer"
-                className="w-full rounded-xl bg-black/40 border border-white/[0.1] py-2 pl-10 pr-4 text-xs text-white placeholder-[#8B8B9A] focus:outline-none focus:border-[#B8FF00]"
+                placeholder="Enter your name"
+                className="w-full rounded-xl bg-black/40 border border-white/[0.1] py-2 pl-10 pr-4 text-xs text-white placeholder-[#8B8B9A]/60 focus:outline-none focus:border-[#B8FF00]"
               />
             </div>
           </div>
@@ -110,10 +112,12 @@ export default function RegisterPage() {
               <input
                 type="text"
                 required
+                autoComplete="off"
+                spellCheck={false}
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="alex_beats"
-                className="w-full rounded-xl bg-black/40 border border-white/[0.1] py-2 pl-10 pr-4 text-xs text-white placeholder-[#8B8B9A] focus:outline-none focus:border-[#B8FF00]"
+                placeholder="choose_username"
+                className="w-full rounded-xl bg-black/40 border border-white/[0.1] py-2 pl-10 pr-4 text-xs text-white placeholder-[#8B8B9A]/60 focus:outline-none focus:border-[#B8FF00]"
               />
             </div>
           </div>
@@ -127,10 +131,12 @@ export default function RegisterPage() {
               <input
                 type="email"
                 required
+                autoComplete="off"
+                spellCheck={false}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="alex@domain.com"
-                className="w-full rounded-xl bg-black/40 border border-white/[0.1] py-2 pl-10 pr-4 text-xs text-white placeholder-[#8B8B9A] focus:outline-none focus:border-[#B8FF00]"
+                placeholder="Enter your email"
+                className="w-full rounded-xl bg-black/40 border border-white/[0.1] py-2 pl-10 pr-4 text-xs text-white placeholder-[#8B8B9A]/60 focus:outline-none focus:border-[#B8FF00]"
               />
             </div>
           </div>
@@ -144,10 +150,12 @@ export default function RegisterPage() {
               <input
                 type="password"
                 required
+                autoComplete="new-password"
+                spellCheck={false}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full rounded-xl bg-black/40 border border-white/[0.1] py-2 pl-10 pr-4 text-xs text-white placeholder-[#8B8B9A] focus:outline-none focus:border-[#B8FF00]"
+                placeholder="Create a password"
+                className="w-full rounded-xl bg-black/40 border border-white/[0.1] py-2 pl-10 pr-4 text-xs text-white placeholder-[#8B8B9A]/60 focus:outline-none focus:border-[#B8FF00]"
               />
             </div>
           </div>
@@ -161,10 +169,12 @@ export default function RegisterPage() {
               <input
                 type="password"
                 required
+                autoComplete="new-password"
+                spellCheck={false}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full rounded-xl bg-black/40 border border-white/[0.1] py-2 pl-10 pr-4 text-xs text-white placeholder-[#8B8B9A] focus:outline-none focus:border-[#B8FF00]"
+                placeholder="Confirm your password"
+                className="w-full rounded-xl bg-black/40 border border-white/[0.1] py-2 pl-10 pr-4 text-xs text-white placeholder-[#8B8B9A]/60 focus:outline-none focus:border-[#B8FF00]"
               />
             </div>
           </div>

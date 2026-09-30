@@ -38,11 +38,6 @@ export default function LoginPage() {
     }
   };
 
-  const fillDemo = () => {
-    setEmail("demo@vybeon.app");
-    setPassword("demo1234");
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#050505] p-4 relative overflow-hidden">
       {/* Dynamic Aurora Ambient Gradients */}
@@ -67,21 +62,6 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Demo Hint Box */}
-        <div className="rounded-2xl border border-[#B8FF00]/30 bg-[#B8FF00]/5 p-3.5 text-xs text-[#F5F5F5] flex items-center justify-between">
-          <div>
-            <p className="font-bold text-[#B8FF00]">Demo Account</p>
-            <p className="text-[11px] text-[#8B8B9A]">demo@vybeon.app • demo1234</p>
-          </div>
-          <button
-            type="button"
-            onClick={fillDemo}
-            className="rounded-lg bg-[#B8FF00]/20 border border-[#B8FF00]/40 px-2.5 py-1 text-[11px] font-bold text-[#B8FF00] hover:bg-[#B8FF00] hover:text-black transition"
-          >
-            Auto-fill
-          </button>
-        </div>
-
         {error && (
           <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-400">
             {error}
@@ -89,7 +69,7 @@ export default function LoginPage() {
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} autoComplete="off" className="space-y-4">
           <div className="space-y-1.5">
             <label className="text-xs font-bold uppercase tracking-wider text-[#8B8B9A]">
               Email Address
@@ -99,10 +79,12 @@ export default function LoginPage() {
               <input
                 type="email"
                 required
+                autoComplete="off"
+                spellCheck={false}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@vybeon.app"
-                className="w-full rounded-xl bg-black/40 border border-white/[0.1] py-2.5 pl-10 pr-4 text-xs text-white placeholder-[#8B8B9A] focus:outline-none focus:border-[#B8FF00] transition"
+                placeholder="Enter your email"
+                className="w-full rounded-xl bg-black/40 border border-white/[0.1] py-2.5 pl-10 pr-4 text-xs text-white placeholder-[#8B8B9A]/60 focus:outline-none focus:border-[#B8FF00] transition"
               />
             </div>
           </div>
@@ -116,10 +98,12 @@ export default function LoginPage() {
               <input
                 type="password"
                 required
+                autoComplete="current-password"
+                spellCheck={false}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full rounded-xl bg-black/40 border border-white/[0.1] py-2.5 pl-10 pr-4 text-xs text-white placeholder-[#8B8B9A] focus:outline-none focus:border-[#B8FF00] transition"
+                placeholder="Enter your password"
+                className="w-full rounded-xl bg-black/40 border border-white/[0.1] py-2.5 pl-10 pr-4 text-xs text-white placeholder-[#8B8B9A]/60 focus:outline-none focus:border-[#B8FF00] transition"
               />
             </div>
           </div>
