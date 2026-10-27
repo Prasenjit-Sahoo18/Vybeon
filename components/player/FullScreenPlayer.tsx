@@ -154,7 +154,10 @@ export function FullScreenPlayer() {
               step={0.001}
               value={progress || 0}
               onChange={handleSeek}
-              className="w-full accent-[#B8FF00] h-1.5 bg-white/10 rounded-full cursor-pointer"
+              className="w-full h-1.5 rounded-full cursor-pointer"
+              style={{
+                background: `linear-gradient(to right, #B8FF00 ${(progress || 0) * 100}%, rgba(255,255,255,0.20) ${(progress || 0) * 100}%)`,
+              }}
             />
             <div className="flex justify-between text-xs font-mono text-[#8B8B9A]">
               <span>{formatDuration(currentTime)}</span>
