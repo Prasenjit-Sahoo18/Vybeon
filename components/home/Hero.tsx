@@ -4,12 +4,22 @@ import React from "react";
 import Link from "next/link";
 import { Play, Sparkles, Zap, Flame } from "lucide-react";
 import { motion } from "framer-motion";
+import { usePlayerStore } from "@/store/player";
+import { DEMO_TRACKS } from "@/lib/music/demo-catalog";
 
 interface HeroProps {
   onPlayTrending?: () => void;
 }
 
 export function Hero({ onPlayTrending }: HeroProps) {
+  const handlePlayTrending = () => {
+    if (onPlayTrending) {
+      onPlayTrending();
+    } else if (DEMO_TRACKS.length > 0) {
+      usePlayerStore.getState().playTrack(DEMO_TRACKS[0], DEMO_TRACKS);
+    }
+  };
+
   return (
     <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-[#090912] p-8 md:p-14 shadow-2xl mb-10">
       {/* Aurora Neon Gradients */}
@@ -42,7 +52,7 @@ export function Hero({ onPlayTrending }: HeroProps) {
 
           <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
             <button
-              onClick={onPlayTrending}
+              onClick={handlePlayTrending}
               className="flex items-center gap-2.5 rounded-full bg-[#B8FF00] px-7 py-3.5 text-sm font-bold text-[#050505] shadow-[0_0_25px_rgba(184,255,0,0.4)] hover:scale-105 hover:brightness-110 transition-all duration-200"
             >
               <Play className="h-4 w-4 fill-current ml-0.5" />

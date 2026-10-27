@@ -321,7 +321,10 @@ export function MusicPlayer() {
                   step={0.001}
                   value={progress || 0}
                   onChange={handleSeek}
-                  className="w-full accent-[#B8FF00] h-1 bg-white/10 rounded-full cursor-pointer group-hover:h-1.5 transition-all"
+                  className="w-full h-1 rounded-full cursor-pointer group-hover:h-1.5 transition-all"
+                  style={{
+                    background: `linear-gradient(to right, #B8FF00 ${(progress || 0) * 100}%, rgba(255,255,255,0.20) ${(progress || 0) * 100}%)`,
+                  }}
                 />
               </div>
 
@@ -395,7 +398,10 @@ export function MusicPlayer() {
                 step={0.01}
                 value={isMuted ? 0 : volume}
                 onChange={(e) => setVolume(parseFloat(e.target.value))}
-                className="w-18 accent-[#B8FF00] h-1 bg-white/10 rounded-full cursor-pointer"
+                className="w-18 h-1 rounded-full cursor-pointer"
+                style={{
+                  background: `linear-gradient(to right, #B8FF00 ${(isMuted ? 0 : volume) * 100}%, rgba(255,255,255,0.20) ${(isMuted ? 0 : volume) * 100}%)`,
+                }}
               />
             </div>
 
