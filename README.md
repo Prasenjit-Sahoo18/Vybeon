@@ -1,293 +1,566 @@
-# VYBEON
-https://vybeon.onrender.com/
+# 🎧 VYBEON — Where Every Vibe Comes Alive
 
-<div align="center">
+<p align="center">
+  <strong>A next-generation music discovery and streaming experience.</strong>
+  <br />
+  Discover music by mood, create personalized listening sessions, explore artists, and visualize every beat through an immersive neon interface.
+</p>
 
-### **Where Every Vibe Comes Alive.**
-
-[![Next.js](https://img.shields.io/badge/Next.js-14.2-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Prisma](https://img.shields.io/badge/Prisma-5.22-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://www.prisma.io/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![Render](https://img.shields.io/badge/Render-Deploy_Ready-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://render.com/)
-[![License](https://img.shields.io/badge/License-MIT-B8FF00?style=for-the-badge)](LICENSE)
-
-*An original, production-ready, futuristic music streaming platform engineered for lossless playback, algorithmic frequency tuning, and mood-driven discovery.*
-
-> **Notice:** VYBEON is an independent music-tech platform and is not affiliated with Spotify, Apple Music, or any other proprietary streaming service. All seeded audio uses legal, royalty-free Creative Commons assets.
-
-</div>
-
----
-
-## ⚡ Key Highlights
-
-- 🎨 **Radium Neon Aesthetic:** Custom design system built with Radium Green (`#B8FF00`), Deep Purple (`#7C3AED`), and Cyan (`#00F5FF`) with aurora backgrounds, glassmorphism, and neon glow effects.
-- 🔮 **Vibe Engine:** Algorithmic mood-to-playlist generator matching mood, kinetic energy, and session duration into immediate tailored queues.
-- 🤖 **NeonMix AI:** Natural-language conversational music assistant parsing prompts into curated acoustic sets without external API costs.
-- 📊 **Music DNA:** Listening analytics, weekly velocity charts, genre resonance breakdowns (Recharts), and gamified achievement unlocks.
-- 📡 **Neon Radio:** Real-time endless stream radio stations across genres, artists, and moods.
-- 🔊 **Web Audio Visualizer:** Real-time frequency spectrum analyzer and oscilloscope reacting dynamically to streaming playback.
-- 🚀 **Render Blueprint Ready:** Native `render.yaml` with automated PostgreSQL database provisioning and single-click cloud deployment.
+<p align="center">
+  <a href="https://vybeon.onrender.com/">
+    <img src="https://img.shields.io/badge/🌐_Live_Demo-Visit_VYBEON-B8FF00?style=for-the-badge&labelColor=050505" alt="Live Demo" />
+  </a>
+  <a href="https://github.com/Prasenjit-Sahoo18/Vybeon">
+    <img src="https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github" alt="GitHub Repository" />
+  </a>
+  <img src="https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js" alt="Next.js" />
+  <img src="https://img.shields.io/badge/TypeScript-Enabled-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="MIT License" />
+</p>
 
 ---
 
-## 📐 Architecture
+## 📖 Table of Contents
+
+- [Overview](#-overview)
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [System Architecture](#-system-architecture)
+- [Getting Started](#-getting-started)
+- [Environment Configuration](#-environment-configuration)
+- [Database Setup](#-database-setup)
+- [Demo Experience](#-demo-experience)
+- [Testing and Quality Checks](#-testing-and-quality-checks)
+- [Project Structure](#-project-structure)
+- [Deployment](#-deployment)
+- [Security](#-security)
+- [Roadmap](#-roadmap)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Connect](#-connect)
+
+---
+
+## 🌌 Overview
+
+**VYBEON** is a futuristic music-streaming platform designed to make music discovery more personal, interactive, and immersive.
+
+Instead of relying solely on traditional browsing, VYBEON introduces mood-driven discovery, algorithmically generated listening queues, a conversational music assistant, personalized music analytics, and real-time audio visualization.
+
+Its signature **Radium Neon** design combines glowing accents, dark surfaces, animated visual elements, and glass-inspired components to create a distinctive listening experience.
+
+### 🎯 The Vision
+
+> Music is more than what you hear. It's what you feel.
+
+VYBEON brings music discovery, listening, and personalization together in one cohesive platform.
+
+**[🚀 Explore the live application](https://vybeon.onrender.com/)**
+
+## ✨ Features
+
+### 🎵 Music Discovery and Playback
+
+- **Discover:** Explore tracks, artists, albums, genres, and curated music collections.
+- **Smart Search:** Find music through a searchable interface with category filters.
+- **Music Player:** Listen through an integrated player with queue management and playback controls.
+- **Personal Library:** Organize playlists, liked tracks, and listening history.
+- **Artist and Album Pages:** Explore artist profiles, discographies, and album tracklists.
+- **Recently Played:** Revisit previously played music.
+
+### 🔮 Vibe Engine
+
+Discover music based on how you feel.
+
+- Generate listening queues based on mood and energy.
+- Incorporate session duration into playlist selection.
+- Create personalized listening experiences through algorithmic matching.
+
+### 🤖 NeonMix AI
+
+Meet your conversational music assistant.
+
+- Interpret natural-language music requests.
+- Translate listening preferences into curated music selections.
+- Make music discovery more intuitive through a conversational interface.
+
+NeonMix is designed around local query processing and the project's music catalog, without requiring an external AI API for its documented demo experience.
+
+### 📡 Neon Radio
+
+- Explore continuous radio-style listening queues.
+- Discover tracks organized around genres, artists, and moods.
+- Enjoy a more hands-off listening experience.
+
+### 📊 Music DNA Analytics
+
+Understand your listening habits through visual analytics.
+
+- Listening activity and weekly trends.
+- Genre-resonance breakdowns.
+- Listening statistics and progress charts.
+- Gamified achievements and milestones.
+
+### 🔊 Real-Time Audio Visualization
+
+Experience music visually with browser-based audio visualization.
+
+- Frequency-spectrum analysis.
+- Oscilloscope-style visual effects.
+- Dynamic visuals synchronized with audio playback.
+
+### 🎨 Radium Neon Design System
+
+VYBEON features a custom dark interface with vibrant accents, ambient gradients, and glowing interactive elements.
+
+| Design Token | Color | Purpose |
+|---|---|---|
+| Radium Green | `#B8FF00` | Primary accent and active states |
+| Deep Purple | `#7C3AED` | Ambient gradients |
+| Neon Cyan | `#00F5FF` | Highlights and visual indicators |
+| Void Black | `#050505` | Main background |
+| Card Surface | `#11111A` | Elevated content panels |
+| Primary Text | `#F5F5F5` | Main content |
+
+### ⌨️ Keyboard Shortcuts
+
+The project documents the following playback shortcuts:
+
+| Key | Action |
+|---|---|
+| `Space` | Play or pause |
+| `←` / `→` | Seek backward or forward by 5 seconds |
+| `↑` / `↓` | Adjust volume |
+| `N` / `P` | Next or previous track |
+
+---
+
+## 🛠️ Tech Stack
+
+VYBEON uses a modern full-stack TypeScript architecture.
+
+| Layer | Technologies |
+|---|---|
+| Frontend | Next.js 14, React 18, TypeScript |
+| Styling | Tailwind CSS, custom CSS, Radix UI |
+| UI Components | Lucide React, Framer Motion |
+| State Management | Zustand |
+| Data Fetching | TanStack Query |
+| Backend | Next.js server-side logic and REST API routes |
+| Authentication | Auth.js / NextAuth v5 |
+| Database | PostgreSQL |
+| ORM | Prisma 5 |
+| Validation | Zod |
+| Charts | Recharts |
+| Testing | Vitest, Testing Library |
+| Deployment | Render |
+| Audio | HTML5 Audio, Web Audio API |
+
+---
+
+## 🏗️ System Architecture
+
+VYBEON separates the user interface, application logic, audio experience, and persistent data into distinct layers.
 
 ```mermaid
-graph TB
-    subgraph Client ["Client Layer (Browser)"]
-        UI["Next.js App Router (React 18)"]
-        Audio["HTML5 Audio + Web Audio Analyser"]
-        Visualizer["Real-Time Canvas Visualizer"]
-        Store["Zustand State Engine"]
-    end
-
-    subgraph Server ["Server Layer (Render Web Service)"]
-        API["RESTful API Endpoints (/api/*)"]
-        Auth["Auth.js v5 (NextAuth JWT)"]
-        VibeEngine["Algorithmic Vibe Engine"]
-        NeonMix["NeonMix AI Query Synthesizer"]
-        Provider["MusicProvider Abstraction"]
-    end
-
-    subgraph Storage ["Database Layer (Render PostgreSQL)"]
-        Prisma["Prisma ORM 5.22"]
-        Postgres[(PostgreSQL 16 Engine)]
-    end
-
-    UI --> Store
-    UI --> Audio
-    Audio --> Visualizer
-    UI --> API
-    API --> Auth
-    API --> VibeEngine
-    API --> NeonMix
-    API --> Provider
-    Provider --> Prisma
-    Prisma --> Postgres
+flowchart TD
+    A[User / Browser] --> B[Next.js Application]
+    B --> C[React UI Components]
+    B --> D[REST API Routes]
+    C --> E[Zustand State]
+    C --> F[HTML5 Audio Player]
+    F --> G[Web Audio Visualizer]
+    D --> H[Auth.js Authentication]
+    D --> I[Vibe Engine]
+    D --> J[NeonMix Assistant]
+    D --> K[Music Provider]
+    K --> L[Prisma ORM]
+    L --> M[(PostgreSQL)]
 ```
 
----
+### How It Works
 
-## 🗄️ Database Entity-Relationship (ER) Model
-
-```mermaid
-erDiagram
-    User ||--o{ Playlist : owns
-    User ||--o{ LikedTrack : likes
-    User ||--o{ FollowedArtist : follows
-    User ||--o{ RecentlyPlayed : listens
-    User ||--o{ ListeningHistory : records
-    User ||--o{ UserAchievement : earns
-
-    Artist ||--o{ Album : releases
-    Artist ||--o{ Track : performs
-    Album ||--o{ Track : contains
-
-    Track ||--o{ TrackGenre : categorizes
-    Genre ||--o{ TrackGenre : applies_to
-    Track ||--o{ PlaylistTrack : included_in
-    Playlist ||--o{ PlaylistTrack : contains
-    Track ||--o| Lyrics : has
-```
+1. Users interact with the Next.js interface to discover and play music.
+2. Zustand manages client-side playback and interface state.
+3. Application API routes handle supported music, library, analytics, and authentication operations.
+4. The Vibe Engine and NeonMix process music-discovery requests.
+5. Prisma provides the database access layer for PostgreSQL.
+6. The Web Audio API analyzes playback data to power visual effects.
 
 ---
 
-## 🎨 Radium Neon Design Tokens
+## 🚀 Getting Started
 
-| Token | Hex Value | Usage |
-| :--- | :--- | :--- |
-| **Primary** | `#B8FF00` | High-voltage neon green accent, active states, glowing badges |
-| **Secondary** | `#7C3AED` | Cyber deep purple, ambient aurora gradient backdrops |
-| **Accent** | `#00F5FF` | Neon cyan, verified artist badges, waveform indicators |
-| **Background** | `#050505` | Deep void black, canvas foundation |
-| **Surface Secondary** | `#090912` | Elevated navigation panels, sidebars, headers |
-| **Card Surface** | `#11111A` | Glass-morphed interactive audio cards |
-| **Primary Text** | `#F5F5F5` | High-contrast readability typography |
-| **Muted Text** | `#8B8B9A` | Secondary metadata, durations, BPM values |
+Follow these steps to run VYBEON locally.
 
----
+### Prerequisites
 
-## 🚀 Quick Start (Local Development)
+Install the following:
 
-### 1. Prerequisites
-- Node.js 18.x or 20.x+
-- PostgreSQL database (local or remote)
+- [Node.js](https://nodejs.org/) — use a version compatible with the project's dependencies.
+- [npm](https://www.npmjs.com/)
+- [PostgreSQL](https://www.postgresql.org/) — local or hosted.
+- [Git](https://git-scm.com/)
 
-### 2. Clone & Install
+### 1. Clone the Repository
+
 ```bash
-git clone https://github.com/your-username/vybeon.git
-cd vybeon
+git clone https://github.com/Prasenjit-Sahoo18/Vybeon.git
+cd Vybeon
+```
+
+### 2. Install Dependencies
+
+```bash
 npm install --legacy-peer-deps
 ```
 
-### 3. Setup Environment Variables
-Copy `.env.example` to `.env`:
+### 3. Configure Environment Variables
+
+Create a local environment file from the example:
+
+**macOS / Linux**
+
 ```bash
-cp .env.example .env
-```
-Fill in your database URL:
-```env
-DATABASE_URL="postgresql://vybeon_user:password@localhost:5432/vybeon?schema=public"
-NEXTAUTH_SECRET="your-32-char-random-secret-key"
-NEXTAUTH_URL="http://localhost:3000"
-DEMO_MODE="true"
+cp .env.example .env.local
 ```
 
-### 4. Migrate & Seed Database
+**Windows PowerShell**
+
+```powershell
+Copy-Item .env.example .env.local
+```
+
+Open `.env.local` and configure the required variables as described below.
+
+### 4. Configure PostgreSQL
+
+Create a PostgreSQL database for VYBEON and update `DATABASE_URL` with your database credentials.
+
+Example:
+
+```env
+DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/vybeon?schema=public"
+```
+
+Replace the example credentials with your actual local database configuration.
+
+### 5. Generate Prisma Client and Initialize the Database
+
 ```bash
+npx prisma generate
 npx prisma db push
+```
+
+To populate the development database with the project's demo music catalog, run:
+
+```bash
 npm run db:seed
 ```
-*Seeds 100+ tracks, 30+ artists, 22 albums, 15 genres, achievements, and a demo user.*
 
-### 5. Start Development Server
+### 6. Start the Development Server
+
 ```bash
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-**Demo Credentials:**
-- Email: `demo@vybeon.app`
-- Password: `demo1234`
+Open the application at:
 
----
-
-## 🌐 One-Click Render Deployment
-
-VYBEON includes a complete **Render Blueprint** (`render.yaml`) that configures:
-1. A **Web Service** running the Next.js application.
-2. A managed **Render PostgreSQL Database**.
-
-### Deployment Steps:
-1. Push this repository to your GitHub account.
-2. Log into [Render.com](https://render.com/).
-3. Click **New +** -> **Blueprint**.
-4. Connect your GitHub repository containing `render.yaml`.
-5. Render will automatically provision:
-   - `vybeon-db` (PostgreSQL 16)
-   - `vybeon-web` (Node Web Service)
-   - Injects `DATABASE_URL` directly from the database into the service.
-   - Generates a secure `NEXTAUTH_SECRET`.
-6. Click **Apply**.
-7. In the Render Web Service shell, run the seed command once:
-   ```bash
-   npm run db:seed
-   ```
-8. Access your live platform at your custom `onrender.com` URL!
-
-### Health Check Endpoint
-Render automatically monitors instance health via:
-```http
-GET /api/health
-```
-Response:
-```json
-{
-  "status": "ok",
-  "service": "VYBEON",
-  "timestamp": "2024-09-19T10:00:00.000Z"
-}
-```
+**http://localhost:3000**
 
 ---
 
-## 🧪 Testing
+## 🔐 Environment Configuration
 
-Run the automated Vitest test suite:
+VYBEON uses environment variables to keep database credentials and authentication secrets outside the source code.
+
+Configure the following variables in `.env.local`:
+
+| Variable | Required | Description |
+|---|---|---|
+| `DATABASE_URL` | Yes | PostgreSQL connection string |
+| `NEXTAUTH_SECRET` | Yes | Secret used by Auth.js / NextAuth |
+| `NEXTAUTH_URL` | Yes | Base URL of the application |
+| `NODE_ENV` | Environment-dependent | Runtime environment |
+| `DEMO_MODE` | Recommended for demo | Enables the seeded demo catalog |
+| `MUSIC_API_URL` | Optional | External music-provider URL |
+| `MUSIC_API_KEY` | Optional | External music-provider key |
+| `GITHUB_CLIENT_ID` | Optional | GitHub OAuth application ID |
+| `GITHUB_CLIENT_SECRET` | Optional | GitHub OAuth application secret |
+
+Example configuration for local development:
+
+```env
+DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/vybeon?schema=public"
+NEXTAUTH_SECRET="replace-with-a-secure-random-secret"
+NEXTAUTH_URL="http://localhost:3000"
+NODE_ENV="development"
+DEMO_MODE="true"
+
+MUSIC_API_URL=""
+MUSIC_API_KEY=""
+
+GITHUB_CLIENT_ID=""
+GITHUB_CLIENT_SECRET=""
+```
+
+Generate a secure authentication secret using:
+
 ```bash
-npm test
+openssl rand -base64 32
 ```
-Type check TypeScript with zero errors:
+
+**Important:** Never commit `.env.local`, database passwords, OAuth secrets, or production credentials to GitHub.
+
+---
+
+## 🗄️ Database Setup
+
+VYBEON uses PostgreSQL for persistent application data and Prisma as its ORM.
+
+The documented data model includes entities for:
+
+- Users and authentication.
+- Artists, albums, tracks, and genres.
+- Playlists and playlist-track associations.
+- Liked tracks and followed artists.
+- Recently played tracks and listening history.
+- Lyrics and user achievements.
+
+### Useful Prisma Commands
+
+| Command | Purpose |
+|---|---|
+| `npx prisma generate` | Generate Prisma Client |
+| `npx prisma db push` | Synchronize the schema with the database |
+| `npx prisma migrate deploy` | Apply existing production migrations |
+| `npm run db:seed` | Populate the demo catalog |
+| `npm run db:studio` | Open Prisma Studio |
+
+Use `db push` for local development when appropriate. For production deployments, prefer a reviewed migration workflow.
+
+---
+
+## 🎧 Demo Experience
+
+VYBEON includes a demo-mode configuration intended to support music discovery without requiring an external music API.
+
+To try the demo:
+
+1. Configure PostgreSQL and the environment variables.
+2. Initialize the database.
+3. Run the seed script.
+4. Start the application.
+5. Explore discovery, playback, the Vibe Engine, NeonMix, radio, and analytics.
+
+The repository documents a seeded catalog containing more than 100 tracks, 30 artists, 22 albums, and 15 genres.
+
+Demo authentication credentials may be available in the repository's setup documentation or seed configuration. Verify the current seed script before relying on any sample account credentials.
+
+---
+
+## 🧪 Testing and Quality Checks
+
+Run the available project checks from the repository root.
+
+### TypeScript
+
 ```bash
 npm run type-check
 ```
 
+### Automated Tests
+
+```bash
+npm test
+```
+
+### Watch Mode
+
+```bash
+npm run test:watch
+```
+
+### Formatting Check
+
+```bash
+npm run format:check
+```
+
+To format supported files:
+
+```bash
+npm run format
+```
+
+Run the relevant checks before submitting changes or deploying updates.
+
 ---
 
-## 📁 Project Directory Structure
+## 📁 Project Structure
 
-```
-vybeon/
+```text
+Vybeon/
 ├── app/
-│   ├── (auth)/
-│   │   ├── login/page.tsx           # Authentication login
-│   │   └── register/page.tsx        # New user registration
-│   ├── (main)/
-│   │   ├── layout.tsx               # Main app layout (Sidebar + Bottom player)
-│   │   ├── page.tsx                 # Home page (Hero, trending rows, mood mixes)
-│   │   ├── discover/page.tsx        # Discover (Genre explorer, hidden gems)
-│   │   ├── search/page.tsx          # Search (Debounced, category filter tabs)
-│   │   ├── radio/page.tsx           # Neon Radio endless broadcast queues
-│   │   ├── vibe-engine/page.tsx     # Signature Vibe Engine mood composer
-│   │   ├── ai/page.tsx              # NeonMix AI music assistant
-│   │   ├── library/page.tsx         # User playlists, likes, history
-│   │   ├── analytics/page.tsx       # Music DNA listening charts & badges
-│   │   ├── settings/page.tsx        # Audio fidelity, bitrate, crossfade
-│   │   ├── artists/[id]/page.tsx    # Artist profile with discography
-│   │   ├── albums/[id]/page.tsx     # Album details and tracklist
-│   │   ├── playlists/[id]/page.tsx  # Playlist details and management
-│   │   ├── tracks/[id]/page.tsx     # Shareable track with OpenGraph metadata
-│   │   └── profile/[username]/page.tsx # Public listener profile
-│   ├── api/
-│   │   ├── auth/[...nextauth]/      # Auth.js authentication handler
-│   │   ├── tracks/                  # Tracks listing and detail
-│   │   ├── artists/                 # Artists listing and detail
-│   │   ├── albums/                  # Albums listing and detail
-│   │   ├── search/                  # Global search engine
-│   │   ├── playlists/               # Playlist CRUD & track associations
-│   │   ├── likes/                   # Liked tracks
-│   │   ├── history/                 # Listening history
-│   │   ├── radio/                   # Radio stream generator
-│   │   ├── vibe-engine/             # Vibe Engine algorithmic matcher
-│   │   ├── neonmix/                 # NeonMix AI query synthesizer
-│   │   ├── analytics/               # Music DNA analytics aggregations
-│   │   ├── achievements/            # Gamification badge unlocks
-│   │   └── health/                  # Render health check probe
-│   ├── globals.css                  # Radium Neon design tokens & aurora styling
-│   ├── layout.tsx                   # Root HTML & Providers wrapper
-│   └── not-found.tsx                # Custom 404 frequency lost page
+│   ├── (auth)/              # Authentication pages
+│   ├── (main)/              # Main application pages
+│   │   ├── discover/        # Music discovery
+│   │   ├── search/          # Search and filtering
+│   │   ├── radio/           # Radio experience
+│   │   ├── vibe-engine/     # Mood-based music discovery
+│   │   ├── ai/              # NeonMix assistant
+│   │   ├── library/         # User music library
+│   │   ├── analytics/       # Music DNA analytics
+│   │   ├── artists/         # Artist profiles
+│   │   ├── albums/          # Album details
+│   │   ├── playlists/       # Playlist pages
+│   │   └── tracks/          # Track pages
+│   ├── api/                 # Application API routes
+│   ├── globals.css          # Global styles and design tokens
+│   ├── layout.tsx           # Root application layout
+│   └── not-found.tsx        # Custom 404 page
 ├── components/
-│   ├── layout/                      # Sidebar, Header, BottomNav
-│   ├── player/                      # MusicPlayer, FullScreenPlayer, Visualizer
-│   ├── music/                       # TrackCard, TrackRow, ArtistCard, AlbumCard
-│   ├── home/                        # Hero banner & floating neon cards
-│   └── providers.tsx                # NextAuth & TanStack Query client providers
+│   ├── layout/              # Navigation and layouts
+│   ├── player/              # Player and visualization
+│   ├── music/               # Music-related components
+│   ├── home/                # Homepage components
+│   └── providers.tsx        # Application providers
 ├── lib/
-│   ├── auth/config.ts               # Auth.js credentials + JWT configuration
-│   ├── db/prisma.ts                 # Prisma Client singleton
-│   ├── music/                       # MusicProvider & DemoProvider abstraction
-│   ├── utils/                       # Duration formatting, slugify, cn()
-│   └── validation/schemas.ts        # Zod validation schemas
+│   ├── auth/                # Authentication configuration
+│   ├── db/                  # Prisma client
+│   ├── music/               # Music provider abstraction
+│   ├── utils/               # Shared utilities
+│   └── validation/          # Validation schemas
 ├── prisma/
-│   ├── schema.prisma                # Relational PostgreSQL schema (15+ models)
-│   └── seed.ts                      # Substantial 100+ track legal demo catalog
-├── store/
-│   ├── player.ts                    # Zustand audio player & queue management
-│   └── ui.ts                        # Zustand UI store
-├── tests/                           # Vitest test suite
-├── render.yaml                      # Render Blueprint deployment definition
-└── .env.example                     # Documented environment variables template
+│   ├── schema.prisma        # Database schema
+│   └── seed.ts              # Demo data seeding
+├── store/                   # Zustand stores
+├── tests/                   # Automated tests
+├── types/                   # TypeScript types
+├── public/                  # Static assets
+├── scripts/                 # Utility scripts
+├── .env.example             # Environment template
+├── render.yaml              # Render deployment blueprint
+├── package.json
+└── README.md
 ```
 
 ---
 
-## 🛡️ Security & Performance
+## 🌐 Deployment
 
-- **Zero Secrets Committed:** Environment variables strictly isolated via `.env.example`.
-- **Injection Proof:** 100% parameterized queries via Prisma ORM.
-- **Client-Side Optimization:** Dynamic image sizing via Next.js Image optimization.
-- **Graceful Fallbacks:** Guaranteed zero-crash architecture if optional external providers are unreachable.
-- **Keyboard Navigation:** Full accessibility shortcuts:
-  - `Space`: Play / Pause
-  - `ArrowLeft` / `ArrowRight`: Seek backward / forward 5s
-  - `ArrowUp` / `ArrowDown`: Volume up / down
-  - `N` / `P`: Next / Previous track
+VYBEON includes a Render Blueprint configuration in `render.yaml`.
+
+### Deployment Steps
+
+1. Push your code to GitHub.
+2. Sign in to [Render](https://render.com/).
+3. Select **New → Blueprint**.
+4. Connect the repository containing `render.yaml`.
+5. Review the proposed web-service and database resources.
+6. Configure any required environment variables.
+7. Apply the Blueprint and wait for the build to finish.
+8. Run database initialization and seeding if required by the deployment configuration.
+
+The configured live application is:
+
+**[https://vybeon.onrender.com/](https://vybeon.onrender.com/)**
+
+### Health Check
+
+The project documents a health-check endpoint:
+
+```http
+GET /api/health
+```
+
+Use it to inspect the application's health response when the deployed service is available.
+
+**Deployment note:** Review the current Render Blueprint, database plan, build logs, and migration requirements before deploying. Resource availability and platform configuration may change.
+
+---
+
+## 🛡️ Security
+
+Security matters for any application that handles user accounts and persistent data.
+
+VYBEON's architecture includes authentication, environment-based configuration, schema validation, and Prisma-based database access.
+
+Recommended practices:
+
+- Keep secrets in environment variables.
+- Never commit real credentials or tokens.
+- Use strong, unique authentication secrets.
+- Validate and authorize protected API requests on the server.
+- Apply database migrations deliberately.
+- Avoid exposing private user data in logs.
+- Review third-party music assets and their licenses before distribution.
+
+Report potential security vulnerabilities privately using the instructions in [`SECURITY.md`](SECURITY.md).
+
+---
+
+## 🗺️ Roadmap
+
+Potential areas for future development include:
+
+- [ ] Enhanced mood-personalization algorithms.
+- [ ] More music-provider integrations.
+- [ ] Improved playlist sharing and collaboration.
+- [ ] Expanded music analytics and listening insights.
+- [ ] More accessible playback and visualization controls.
+- [ ] Additional automated integration tests.
+- [ ] Improved mobile and responsive experiences.
+
+This roadmap represents potential enhancements, not a claim that these features are already implemented.
+
+---
+
+## 🤝 Contributing
+
+Contributions, bug reports, and thoughtful feature suggestions are welcome.
+
+1. Fork the repository.
+2. Create a feature branch.
+3. Implement and test your changes.
+4. Run the relevant quality checks.
+5. Submit a pull request describing your changes.
+
+For more details, review [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+VYBEON is distributed under the **MIT License**. See the [`LICENSE`](LICENSE) file for the full license text.
+
+### 🎼 Music and Third-Party Assets
+
+VYBEON is an independent project and is not affiliated with Spotify, Apple Music, or any other proprietary streaming service.
+
+Audio assets, artwork, and third-party services remain subject to their respective licenses and terms. Check the applicable permissions before redistributing assets or using them commercially.
+
+---
+
+## 👨‍💻 Connect
+
+**Created by Prasenjit Sahoo**
+
+<p align="left">
+  <a href="https://github.com/Prasenjit-Sahoo18">
+    <img src="https://img.shields.io/badge/GitHub-Prasenjit--Sahoo18-181717?style=for-the-badge&logo=github" alt="GitHub" />
+  </a>
+  <a href="https://www.linkedin.com/in/prasenjit-sahoo18/">
+    <img src="https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin" alt="LinkedIn" />
+  </a>
+</p>
+
+If you find VYBEON interesting, consider giving the repository a ⭐ on GitHub.
+
+---
+
+<p align="center">
+  <strong>VYBEON</strong>
+  <br />
+  <em>Discover your sound. Find your vibe.</em>
+</p>
